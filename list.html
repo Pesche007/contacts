@@ -1,6 +1,40 @@
-<div class="container">
-	<div class="row-fluid col-sm-12">
-		Hallo
-	</div>
+<div class="container-fluid"> 
+	<div class="row">
+        <div class="col-md-2">
+            <pre class="code">{{ contacts | json }}</pre>
+        </div>
+        <div class="col-md-2"> 
+			<div class="list-group">
+	            <a href="javascript:void(0)" ng-click="contactsOPT.groupSel=null" class="list-group-item" ng-class="{'active':contactsOPT.groupSel==null}"><span class="badge">{{contacts.length}}</span>All</a>
+                <a href="javascript:void(0)" ng-click="contactsOPT.groupSel=group;contactsOPT.contactSel=null;contactsOPT.contactDisplay=null;" class="list-group-item" 
+                ng-class="{'active':contactsOPT.groupSel==group}" ng-repeat="group in groupOPT.groups | orderBy:predicate"><span class="badge">{{groupOPT.groupcount[group]}}</span>{{group}}</a>
+            </div>
+        </div>
+        <div class="col-md-2">
+			<div class="list-group">
+                <a href="javascript:void(0)" ng-click="contactsOPT.contactSel=item._id;contactsOPT.contactDisplay=item" class="list-group-item" ng-repeat="item in contacts | orderBy:'lastName'" 
+                ng-if="contactsOPT.groupSel==null || groupCheck(item.groups)" ng-class="{'active':contactsOPT.contactSel==item._id}">{{item.lastName}} {{item.firstName}}</a>
+            </div>
+        </div>   
+        <div class="col-md-4"> 
+        	<div ng-if="contactsOPT.contactDisplay && contactsOPT.contactEdit==false">
+            	<button ng-click="contactsOPT.contactEdit=true" class="btn btn-default pull-right">Edit</button>
+                <h4 ng-if="contactsOPT.contactDisplay.lastName && contactsOPT.contactDisplay.firstName">{{contactsOPT.contactDisplay.lastName}} {{contactsOPT.contactDisplay.firstName}}</h4>
+                <h5 ng-if="contactsOPT.contactDisplay.jobTitle || contactsOPT.contactDisplay.company">
+                	<span ng-if="contactsOPT.contactDisplay.jobTitle">{{contactsOPT.contactDisplay.jobTitle}}</span> 
+                    <span ng-if="contactsOPT.contactDisplay.company">{{contactsOPT.contactDisplay.company}}</span>
+                </h5>
+            </div>
+        	<div ng-if="contactsOPT.contactDisplay && contactsOPT.contactEdit==true">                        	
+                <button ng-click="contactsOPT.contactEdit=false" class="btn btn-warning pull-right">Cancel</button>
+                <button class="btn btn-success pull-right margin-right-S">Save</button>
+            	EDIT
+            </div>
+        </div>             
+        <div class="col-md-2">
+            <pre class="code">{{ groupOPT | json }}</pre>
+            <pre class="code">{{ contactsOPT | json }}</pre>
+        </div>
+	</div>    
 </div>
 
