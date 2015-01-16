@@ -43,7 +43,13 @@ angular.module('contacts')
 		};
 	$scope.contactsShow=function(obj){
 		$scope.contactsOPT.contactDisplay=obj;		
-		$scope.contactsOPT.contactSave=angular.copy(obj);	
+		$scope.contactsOPT.contactSave=$scope.prepareSaveobj(obj);	
+		};
+	$scope.prepareSaveobj=function(obj){
+		var tmpObj=angular.copy(obj);
+		tmpObj.phone.push({type:$scope.phoneOPT.items[0], text:''});
+		tmpObj.email.push({type:$scope.emailOPT.items[0], text:''});
+		return tmpObj;
 		};
 	$scope.contactsEdit=function(){		
 		$scope.contactsOPT.contactEdit=true;
@@ -63,7 +69,13 @@ angular.module('contacts')
 	$scope.setDropdownCustom=function(){
 		
 		};
-	$scope.phoneOPT={items:['Mobile', 'Home', 'Work', 'Main', 'Home Fax', 'Work Fax', 'Pager', 'Other'], selected:null, showNr:0, custom:''};
+	$scope.addElement=function(txt, type, obj){
+		if(txt!=='') {
+			obj.push({type:type, text:''})
+			}
+		};
+	$scope.phoneOPT={items:['Mobile', 'Home', 'Work', 'Main', 'Home Fax', 'Work Fax', 'Pager', 'Other'], selected:null, showNr:0};
+	$scope.emailOPT={items:['Work', 'Home', 'Other'], selected:null, showNr:0};
 })
 
 
