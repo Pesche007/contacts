@@ -16,7 +16,7 @@ angular.module('contacts')
 	AppConfig.setCurrentApp('Contacts', 'fa-user', 'contacts', 'app/contacts/menu.html');
    
     $scope.contacts = null;
-	$scope.contactsOPT={groupSel:null, contactSel:null, contactDisplay:null, contactEdit:false};
+	$scope.contactsOPT={groupSel:null, contactDisplay:null, contactSave:null, contactEdit:false};
 	$scope.groupOPT={groups:[], groupcount:{}};
     dataService.getData().then(function(dataResponse) {
         $scope.contacts = dataResponse.data;
@@ -37,10 +37,33 @@ angular.module('contacts')
 					});
 				}
 			});
-		}	
+		};	
 	$scope.groupCheck=function(obj){
 		return obj.map(function(e) { return e.text}).indexOf($scope.contactsOPT.groupSel)!==-1;
-		}
+		};
+	$scope.contactsShow=function(obj){
+		$scope.contactsOPT.contactDisplay=obj;		
+		$scope.contactsOPT.contactSave=angular.copy(obj);	
+		};
+	$scope.contactsEdit=function(){		
+		$scope.contactsOPT.contactEdit=true;
+		};
+	$scope.contatcsSave=function(){
+		angular.forEach($scope.contactsOPT.contactSave, function(value, key) {
+		  this[key]=value;
+			}, $scope.contactsOPT.contactDisplay);
+		$scope.contactsOPT.contactEdit=false;		
+		};
+	$scope.contatcsCancel=function(){
+		$scope.contactsOPT.contactEdit=false;
+		};
+	$scope.setDropdown=function(obj, model){		
+		model.type=obj;
+		};
+	$scope.setDropdownCustom=function(){
+		
+		};
+	$scope.phoneOPT={items:['Mobile', 'Home', 'Work', 'Main', 'Home Fax', 'Work Fax', 'Pager', 'Other'], selected:null, showNr:0, custom:''};
 })
 
 
