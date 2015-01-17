@@ -18,7 +18,7 @@ angular.module('contacts')
  	$log.log('ContactsListCtrl/cfg = ' + JSON.stringify(cfg, null, '\t'));
   
     $scope.contacts = null;
-	$scope.contactsOPT={groupSel:null, contactSel:null, contactDisplay:null, contactEdit:false};
+	$scope.contactsOPT={groupSel:null, contactDisplay:null, contactSave:null, contactEdit:false};
 	$scope.groupOPT={groups:[], groupcount:{}};
     dataService.getData().then(function(dataResponse) {
         $scope.contacts = dataResponse.data;
@@ -39,12 +39,43 @@ angular.module('contacts')
 					});
 				}
 			});
-		};
+		};	
 	$scope.groupCheck=function(obj){
-		return obj.map(function(e) { 
-			return e.text;
-		}).indexOf($scope.contactsOPT.groupSel)!==-1;
-	};
+		return obj.map(function(e) {return e.text;}).indexOf($scope.contactsOPT.groupSel)!==-1;
+		};
+	$scope.contactsShow=function(obj){
+		$scope.contactsOPT.contactDisplay=obj;		
+		$scope.contactsOPT.contactSave=$scope.prepareSaveobj(obj);	
+		};
+	$scope.prepareSaveobj=function(obj){
+		var tmpObj=angular.copy(obj);
+		tmpObj.phone.push({type:$scope.phoneOPT.items[0], text:''});
+		tmpObj.email.push({type:$scope.emailOPT.items[0], text:''});
+		return tmpObj;
+		};
+	$scope.contactsEdit=function(){		
+		$scope.contactsOPT.contactEdit=true;
+		};
+	$scope.contatcsSave=function(){
+		angular.forEach($scope.contactsOPT.contactSave, function(value, key) {
+		  this[key]=value;
+			}, $scope.contactsOPT.contactDisplay);
+		$scope.contactsOPT.contactEdit=false;		
+		};
+	$scope.contatcsCancel=function(){
+		$scope.contactsOPT.contactEdit=false;
+		};
+	$scope.setDropdown=function(obj, model){		
+		model.type=obj;
+		};
+	$scope.setDropdownCustom=function(){
+		
+		};
+	$scope.addElement=function(txt, type, obj){
+		if(txt!=='') {
+			obj.push({type:type, text:''});
+			}
+		};
+	$scope.phoneOPT={items:['Mobile', 'Home', 'Work', 'Main', 'Home Fax', 'Work Fax', 'Pager', 'Other'], selected:null, showNr:0};
+	$scope.emailOPT={items:['Work', 'Home', 'Other'], selected:null, showNr:0};
 });
-
-
