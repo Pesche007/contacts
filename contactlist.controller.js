@@ -56,13 +56,13 @@ angular.module('contacts')
 	$scope.contactsEdit=function(){		
 		$scope.contactsOPT.contactEdit=true;
 		};
-	$scope.contatcsSave=function(){
+	$scope.contactsSave=function(){
 		angular.forEach($scope.contactsOPT.contactSave, function(value, key) {
 		  this[key]=value;
 			}, $scope.contactsOPT.contactDisplay);
 		$scope.contactsOPT.contactEdit=false;		
 		};
-	$scope.contatcsCancel=function(){
+	$scope.contactsCancel=function(){
 		$scope.contactsOPT.contactEdit=false;
 		};
 	$scope.setDropdown=function(obj, model){		
