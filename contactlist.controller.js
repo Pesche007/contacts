@@ -15,7 +15,7 @@ angular.module('contacts')
 .controller('ContactsListCtrl', function ($scope, $http, $log, cfg, dataService) {
 	cfg.GENERAL.CURRENT_APP = 'contacts';
 	// $translatePartialLoader.addPart('contacts');
- 	$log.log('ContactsListCtrl/cfg = ' + JSON.stringify(cfg));
+ 	$log.log('ContactsListCtrl/cfg = ' + JSON.stringify(cfg, null, '\t'));
   
     $scope.contacts = null;
 	$scope.contactsOPT={groupSel:null, contactSel:null, contactDisplay:null, contactEdit:false};
