@@ -10,7 +10,7 @@ angular.module('contacts')
 			params: '',
 			headers: {}
 		 });
-	 }
+	 };
 })
 .controller('ContactsListCtrl', function ($scope, $http, AppConfig, dataService) {
 	AppConfig.setCurrentApp('Contacts', 'fa-user', 'contacts', 'app/contacts/menu.html');
@@ -39,7 +39,7 @@ angular.module('contacts')
 			});
 		};	
 	$scope.groupCheck=function(obj){
-		return obj.map(function(e) { return e.text}).indexOf($scope.contactsOPT.groupSel)!==-1;
+		return obj.map(function(e) {return e.text;}).indexOf($scope.contactsOPT.groupSel)!==-1;
 		};
 	$scope.contactsShow=function(obj){
 		$scope.contactsOPT.contactDisplay=obj;		
@@ -71,11 +71,9 @@ angular.module('contacts')
 		};
 	$scope.addElement=function(txt, type, obj){
 		if(txt!=='') {
-			obj.push({type:type, text:''})
+			obj.push({type:type, text:''});
 			}
 		};
 	$scope.phoneOPT={items:['Mobile', 'Home', 'Work', 'Main', 'Home Fax', 'Work Fax', 'Pager', 'Other'], selected:null, showNr:0};
 	$scope.emailOPT={items:['Work', 'Home', 'Other'], selected:null, showNr:0};
-})
-
-
+});
