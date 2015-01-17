@@ -10,11 +10,13 @@ angular.module('contacts')
 			params: '',
 			headers: {}
 		 });
-	 }
+	 };
 })
-.controller('ContactsListCtrl', function ($scope, $http, AppConfig, dataService) {
-	AppConfig.setCurrentApp('Contacts', 'fa-user', 'contacts', 'app/contacts/menu.html');
-   
+.controller('ContactsListCtrl', function ($scope, $http, $log, cfg, dataService) {
+	cfg.GENERAL.CURRENT_APP = 'contacts';
+	// $translatePartialLoader.addPart('contacts');
+ 	$log.log('ContactsListCtrl/cfg = ' + JSON.stringify(cfg));
+  
     $scope.contacts = null;
 	$scope.contactsOPT={groupSel:null, contactSel:null, contactDisplay:null, contactEdit:false};
 	$scope.groupOPT={groups:[], groupcount:{}};
@@ -37,10 +39,12 @@ angular.module('contacts')
 					});
 				}
 			});
-		}	
+		};
 	$scope.groupCheck=function(obj){
-		return obj.map(function(e) { return e.text}).indexOf($scope.contactsOPT.groupSel)!==-1;
-		}
-})
+		return obj.map(function(e) { 
+			return e.text;
+		}).indexOf($scope.contactsOPT.groupSel)!==-1;
+	};
+});
 
 
