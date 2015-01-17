@@ -36,10 +36,10 @@
                                                                
         	<div ng-if="contactsOPT.contactDisplay">
                  <div ng-if="!contactsOPT.contactEdit">
-                    <h5 ng-if="contactsOPT.contactDisplay.jobTitle || contactsOPT.contactDisplay.company">
+                    <p ng-if="contactsOPT.contactDisplay.jobTitle || contactsOPT.contactDisplay.company">
                         <span ng-if="contactsOPT.contactDisplay.jobTitle">{{contactsOPT.contactDisplay.jobTitle}}</span> 
                         <span ng-if="contactsOPT.contactDisplay.company">{{contactsOPT.contactDisplay.company}}</span>
-                    </h5>                  
+                    </p>                  
                     <p ng-repeat="item in contactsOPT.contactSave.phone"><span ng-if="item.text!=''"><strong>{{item.type}}</strong> {{item.text}}</span></p>
                     <p ng-repeat="item in contactsOPT.contactSave.email"><span ng-if="item.text!=''"><strong>{{item.type}}</strong> {{item.text}}</span></p>
                 </div>
