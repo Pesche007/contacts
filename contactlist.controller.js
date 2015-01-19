@@ -10,13 +10,11 @@ angular.module('contacts')
 			params: '',
 			headers: {}
 		 });
-	 };
+	 }
 })
-.controller('ContactsListCtrl', function ($scope, $http, $log, cfg, dataService) {
+.controller('ContactsListCtrl', function ($scope, $http, cfg, dataService) {
 	cfg.GENERAL.CURRENT_APP = 'contacts';
-	// $translatePartialLoader.addPart('contacts');
- 	$log.log('ContactsListCtrl/cfg = ' + JSON.stringify(cfg, null, '\t'));
-  
+   
     $scope.contacts = null;
 	$scope.contactsOPT={groupSel:null, contactDisplay:null, contactSave:null, contactEdit:false};
 	$scope.groupOPT={groups:[], groupcount:{}};
@@ -41,7 +39,7 @@ angular.module('contacts')
 			});
 		};	
 	$scope.groupCheck=function(obj){
-		return obj.map(function(e) {return e.text;}).indexOf($scope.contactsOPT.groupSel)!==-1;
+		return obj.map(function(e) { return e.text}).indexOf($scope.contactsOPT.groupSel)!==-1;
 		};
 	$scope.contactsShow=function(obj){
 		$scope.contactsOPT.contactDisplay=obj;		
@@ -49,33 +47,62 @@ angular.module('contacts')
 		};
 	$scope.prepareSaveobj=function(obj){
 		var tmpObj=angular.copy(obj);
-		tmpObj.phone.push({type:$scope.phoneOPT.items[0], text:''});
-		tmpObj.email.push({type:$scope.emailOPT.items[0], text:''});
+		tmpObj.phone.push({type:$scope.itemsOPT.phone.items[0], text:''});
+		tmpObj.email.push({type:$scope.itemsOPT.email.items[0], text:''});
+		tmpObj.address.push({type:$scope.itemsOPT.address.items[0], street:'', zipCode:'', city:'', country:''});
 		return tmpObj;
 		};
 	$scope.contactsEdit=function(){		
 		$scope.contactsOPT.contactEdit=true;
 		};
-	$scope.contactsSave=function(){
+	$scope.contatcsSave=function(){
 		angular.forEach($scope.contactsOPT.contactSave, function(value, key) {
 		  this[key]=value;
 			}, $scope.contactsOPT.contactDisplay);
 		$scope.contactsOPT.contactEdit=false;		
 		};
-	$scope.contactsCancel=function(){
+	$scope.contatcsCancel=function(){
 		$scope.contactsOPT.contactEdit=false;
 		};
 	$scope.setDropdown=function(obj, model){		
 		model.type=obj;
 		};
-	$scope.setDropdownCustom=function(){
-		
-		};
-	$scope.addElement=function(txt, type, obj){
-		if(txt!=='') {
-			obj.push({type:type, text:''});
+	$scope.checkElement=function(item, optObj, saveObj, index){					
+		var itemEmpty=1;
+		for (var key in item) {
+			if (item.hasOwnProperty(key) && key!=='type') {
+				if(item[key]!=='') {
+					itemEmpty=0;
+					break;
+					}
+				}
+			}
+		var lastItem=saveObj.length===(index+1) ? 1 : 0;
+		if(itemEmpty) {
+			if(!lastItem) {
+				$scope.removeElement(saveObj, index);				
+				}
+			}
+		else{//not empty
+			if(lastItem) {
+				var tmpObj={type:optObj.items[0]};
+				angular.forEach(optObj.elements, function(value) {
+					tmpObj[value]='';
+					});
+				saveObj.push(tmpObj);
+				}
 			}
 		};
-	$scope.phoneOPT={items:['Mobile', 'Home', 'Work', 'Main', 'Home Fax', 'Work Fax', 'Pager', 'Other'], selected:null, showNr:0};
-	$scope.emailOPT={items:['Work', 'Home', 'Other'], selected:null, showNr:0};
+	$scope.removeElement = function(saveObj, index) {
+		saveObj.splice(index, 1);
+		};
+	$scope.additionalElement=function(item){
+		$scope.contactsOPT.contactSave[item.saveObjE]='';
+		};	
+	$scope.itemsOPT={
+		job:{text:'Job Title', saveObjE:'jobTitle', items:[], elements:['text'], selected:null, showNr:0, additional:1},		
+		phone:{text:'Phone Number', items:['Mobile', 'Home', 'Work', 'Main', 'Home Fax', 'Work Fax', 'Pager', 'Other'], elements:['text'], selected:null, showNr:'', additional:0},
+		email:{text:'Email', items:['Work', 'Home', 'Other'], elements:['text'], selected:null, showNr:'', additional:0},
+		address:{text:'Address', items:['Work', 'Home', 'Other'], elements:['street', 'zipCode', 'city', 'country'], selected:null, showNr:'', additional:0}
+		};
 });
