@@ -1,0 +1,58 @@
+<div class="container-fluid"> 
+	<div class="row">
+        <div class="col-md-3">
+
+        </div>
+        <div class="col-md-6">
+            <div class="list-group">
+            	<div class="list-group-item">
+                    <div class="row">
+                        <div class="col-xs-6">
+                        	<div class="search-icon">
+                            	<input type="text" class="form-control" placeholder="Search..."/>
+                                <i></i>
+                            </div>
+                        </div> 
+                        <div class="col-xs-4">               
+                            <div class="btn-group" role="group">
+                                <button type="button" class="btn btn-default">Due Date</button>
+                                <button type="button" class="btn btn-default">Status</button>
+                                <button type="button" class="btn btn-default">Assigned</button>
+                            </div>
+                        </div> 
+                        <div class="col-xs-2">
+                            <button class="btn btn-primary btn-block" ng-click="addUser()"><i class="fa fa-plus"></i> Task</i></button>
+                        </div>                        
+	            	</div>               
+                </div>
+                <a href="javascript:void(0)" ng-click="taskOpen(task)" class="list-group-item clearfix" ng-repeat="task in tasks">
+                <h4 class="list-group-item-heading">{{task.label}}</h4>
+                <p class="list-group-item-text pull-left">{{task.desc | limitTo:50}}</p>
+                <p class="list-group-item-text pull-right" ng-if="task.due!==''">{{task.due}}</p>
+                </a>
+            </div>
+        </div>   		           
+        <div class="col-md-3">
+        
+        </div>
+	</div>    
+</div>
+<script type="text/ng-template" id="myModalContent.html">
+	<div class="modal-header">
+		<h4 class="modal-title clearfix">
+			<div class="pull-left">{{activeTask.label}}</div>			
+			<div class="pull-right border-right-M" ng-if="activeTask.due"><i class="fa fa-clock-o"></i> {{activeTask.due}}</div>
+			<div class="pull-right border-right-M" ng-if="activeTask.assigned.id"><i class="fa fa-user"></i> {{activeTask.assigned.lastName}} {{activeTask.assigned.fristName}}</div>
+			<div class="pull-right border-right-M" ng-if="activeTask.category.label"><i class="fa fa-folder"></i> {{activeTask.category.label}}</div>
+			<div class="pull-right border-right-M" ng-if="activeTask.status"><i class="fa fa-info-circle"></i> {{status[activeTask.status]}}</div>
+		</h4>
+	</div>
+	<div class="modal-body">
+		<p>{{activeTask.desc}}</p>
+		{{activeTask | json}}
+	</div>
+	<div class="modal-footer">
+		<button class="btn btn-primary" ng-click="ok()">OK</button>
+		<button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+	</div>
+</script>

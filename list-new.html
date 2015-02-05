@@ -1,0 +1,159 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-2">
+            <pre class="code">{{ groupOPT | json }}</pre>
+            <pre class="code">{{ contactsOPT | json }}</pre>
+        </div>
+        <div class="col-md-4">
+            <div class="list-group">
+                <div class="list-group-item">
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <div class="search-icon">
+                                <input type="text" class="form-control" placeholder="Search..." ng-model="filterOPT.searchTerm"  ng-change="contactsOPT.contactNamesDisplay=contactsOPT.contactNames;filterOPT.letterSelected=''"/>
+                                <i></i>
+                            </div>
+                        </div>
+                        <div class="col-xs-4">
+                            <div class="dropdown">
+                                <button class="btn btn-default btn-block dropdown-toggle dropdown-flesh">
+                                    <span class="pull-left padding-left-M"><span ng-if="!contactsOPT.groupSel">All Groups</span><span ng-if="contactsOPT.groupSel">{{contactsOPT.groupSel}}</span></span>
+                                </button>
+                            <ul class="dropdown-menu text-left" role="menu">
+                                <li><a href="javascript:void(0)" ng-click="contactsOPT.groupSel=null"><span class="badge pull-right">{{contacts.length}}</span>All Groups </a></li>
+                                <li ng-repeat="group in groupOPT.groups | orderBy:predicate">
+                                    <a href="javascript:void(0)" ng-click="contactsOPT.groupSel=group;contactsOPT.contactDisplay=null;">
+                                        <span class="badge pull-right">{{groupOPT.groupcount[group]}}</span>{{group}}
+                                    </a>
+                                 </li>
+                            </ul>
+                            </div>
+                        </div>
+                        <div class="col-xs-2">
+                            <button class="btn btn-primary btn-block" ng-click="addUser()"><i class="fa fa-plus"></i> User</i></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="list-group-item padding-left-S padding-right-S">
+                    <a class="alphabet-letter" href="javascript:void(0)" ng-repeat="letter in alphabet" ng-click="letterFilter(letter)" ng-class="{'bold': letter==filterOPT.letterSelected}">{{::letter}}</a>
+                </div>
+                <div class="viewportheight75">
+                    <a href="javascript:void(0)" ng-repeat="item in contactsOPT.contactNamesDisplay | orderBy:'lastName' | filter:filterOPT.searchTerm" ng-if="contactsOPT.groupSel==null || groupCheck(item._id)"  ng-class="{'active':contactsOPT.contactTmp._id==item._id}" ng-click="contactsShow(item)" class="list-group-item list-group-flesh">
+                        <i class="fa fa-3x fa-user pull-left"></i>
+                        <h4 class="list-group-item-heading">{{item.lastName}} {{item.firstName}}</h4>
+                        <p class="list-group-item-text">
+                            <span ng-if="item.jobTitle">{{item.jobTitle}}</span> <span ng-if="item.company">{{item.company}}</span>
+                            <span ng-if="!item.company && !item.jobTitle">Company</span>
+                       </p>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <form name="contactForm">
+            <div class="panel panel-default">
+                <div class="panel-heading clearfix">
+                    <h3 class="panel-title pull-left padding-button">Contact Detail</h3>
+                    <button ng-if="!contactsOPT.contactEdit && contactsOPT.contactDisplay" ng-click="contactsEdit()" class="btn btn-primary pull-right"><span class="fa fa-pencil"></span> Edit</button>
+                    <button ng-if="contactsOPT.contactEdit" ng-click="contatcsSave()" ng-disabled="contactForm.$invalid" class="btn btn-primary pull-right"><span class="fa fa-check"></span> Ok</button>
+                    <button ng-if="contactsOPT.contactEdit" ng-click="contatcsCancel()" class="btn btn-default pull-right margin-right-S"><span class="fa fa-reply"></span> Cancel</button>
+                </div>
+                <div class="list-group"><!--Start List Group-->
+                    <div class="list-group-item" ng-if="contactsOPT.contactDisplay">
+                        <p class="text-muted">Name</p>
+                        <h4 ng-if="!contactsOPT.contactEdit" class="list-group-item-heading">{{contactsOPT.contactDisplay[0].items[0]}} {{contactsOPT.contactDisplay[1].items[0]}}</h4><!--View-->
+                        <div class="row" ng-if="contactsOPT.contactEdit"><!--Edit-->
+                            <div class="col-md-6">
+                                <input type="text" class="form-control" ng-model="contactsOPT.contactDisplay[0].items[0]" placeholder="Last Name" ng-required="itemsOPT.lastName.required"/>
+                           </div>
+                            <div class="col-md-6">
+                                <input type="text" class="form-control" ng-model="contactsOPT.contactDisplay[1].items[0]" placeholder="First Name" ng-required="itemsOPT.firstName.required"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="list-group-item item-animate clearfix" ng-repeat="item in contactsOPT.contactDisplay | orderBy:'sortNr'" ng-if="item.items && item.items.length && !item.hide">
+                        <p class="text-muted">{{item.label}}</p>
+                        <button class="btn btn-default position-bottom-right" ng-if="contactsOPT.contactEdit && itemsOPT[item.key].hasDropdown" ng-click="addItemDropdown(item)"><span class="fa fa-plus"></span></button>
+                        <div ng-repeat="e in item.items track by $index" ng-init="parentIndex=$index">
+                            <div ng-if="e.type!==undefined" class="pull-left margin-right-M">
+                                <h4 ng-if="!contactsOPT.contactEdit" class="list-group-item-heading" >{{e.type}}</h4><!--View-->
+                                <!--Dropdown-->
+                                <div ng-if="contactsOPT.contactEdit && itemsOPT[item.key].hasDropdown"><!--Edit-->
+                                   <div ng-if="itemsOPT[item.key].showNr===$index" class="input-group margin-bottom-S margin-right-S"><!-- Custom Edit-->
+                                        <input type="text" class="form-control" ng-model="e.type"/>
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-default" ng-disabled="e.type==''" ng-click="itemsOPT[item.key].showNr=''"><span class="fa fa-check"></span></button>
+                                        </span>
+                                    </div>
+                                    <div ng-if="itemsOPT[item.key].showNr!==$index" class="dropdown">
+                                        <h4 class="dropdown-toggle pointer" ng-class="{'pull-left':!itemsOPT[item.key].items.length}">
+                                            {{e.type}} <span class="fa fa-caret-down"></span>
+                                        </h4>
+                                        <button ng-if="!itemsOPT[item.key].items.length" ng-click="deleteItem(2, item.key, parentIndex)" class="btn btn-default pull-right"><span class="fa fa-trash-o"></span></button>
+                                    <ul class="dropdown-menu text-left" role="menu">
+                                        <li ng-repeat="type in itemsOPT[item.key].dropdown">
+                                            <a href="javascript:void(0)" ng-click="setDropdown(type, e)">{{type}}</a>
+                                        </li>
+                                        <li class="divider"></li>
+                                        <li><a href="javascript:void(0)" ng-click="itemsOPT[item.key].showNr=$index">Custom</a></li>
+                                    </ul>
+                                    </div>
+                                </div>
+                                <!--End Dropdown-->
+                                <div class="margin-right-S margin-bottom-S" ng-repeat="key in notSorted(e) track by $index" ng-if="key!=='type'" ng-class="{'pull-left':itemsOPT[item.key].items[key].nobr, 'clearfix':1}">
+                                    <span ng-if="!contactsOPT.contactEdit && key!=='dateValue'">{{e[key]}}</span><!--View-->
+                                    <span ng-if="!contactsOPT.contactEdit && key==='dateValue'">{{e[key] | date:'dd.MM.yyyy'}}</span><!--View-->
+                                    <div class="input-group" ng-if="contactsOPT.contactEdit && itemsOPT[item.key].items.length"><!--Edit-->
+                                        <input ng-if="key!=='dateValue'" type="text" class="form-control" ng-model="e[key]" placeholder="{{itemsOPT[item.key].label}}"/>
+                                        <input  ng-if="key=='dateValue'" type="text" class="form-control" datepicker-popup="dd.MM.yyyy" ng-model="e[key]" placeholder="{{itemsOPT[item.key].label}}"
+                                        ng-click="open($event, parentIndex)" is-open="opened[parentIndex]" ng-change="formatedate(e)" starting-day="1" show-weeks="0">
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-default" ng-click="deleteItem(2, item.key, parentIndex)"><span class="fa fa-trash-o"></span></button>
+                                        </span>
+                                    </div>
+                                    <input ng-if="contactsOPT.contactEdit && !itemsOPT[item.key].items.length" type="text" class="form-control" ng-model="e[key]"
+                                    placeholder="{{itemsOPT[item.key].items[key].label}}"/>
+                                </div>
+                            </div>
+                            <div ng-if="e.type===undefined">
+                                <h4 ng-if="!contactsOPT.contactEdit" class="list-group-item-heading">{{e}}</h4><!--View-->
+                                <div class="input-group" ng-if="contactsOPT.contactEdit"><!--Edit-->
+                                    <input type="text" class="form-control" ng-model="item.items[0]" placeholder="{{::item.label}}"/>
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default" ng-click="deleteItem(1, item.key)"><span class="fa fa-trash-o"></span></button>
+                                    </span>
+                                </div>
+                            </div>
+                       </div>
+                    </div>
+                    <div class="panel-footer clearfix" ng-if="contactsOPT.contactEdit">
+                        <button ng-click="contatcsDelete()" class="btn btn-danger pull-right"><span class="fa fa-trash-o"></span> Delete</button>
+                        <div class="dropdown dropup pull-right"><!--Additional Field-->
+                            <button class="btn btn-default pull-right margin-right-S dropdown-toggle">Add Field <span class="fa fa-caret-up"></span></button>
+                            <ul class="dropdown-menu text-left" role="menu">
+                                <li ng-repeat="key in notSorted(itemsOPT)" ng-if="!itemsOPT[key].dHide" ng-class="{'disabled':isDisplayedKey(key)}">
+                                    <a href="javascript:void(0)" ng-click="addItemGeneric(key)">{{::itemsOPT[key].label}}</a>
+                                </li>
+                            </ul>
+                        </div><!--Additional Field-->
+                        <div class="dropdown dropup pull-right"><!--Groups-->
+                            <button class="btn btn-default pull-right margin-right-S dropdown-toggle">Add to Group <span class="fa fa-caret-up"></span></button>
+                            <ul class="dropdown-menu text-left" role="menu">
+                                <li ng-repeat="group in groupOPT.groups | orderBy:predicate" ng-class="{'disabled':groupContactCheck(group)}">
+                                    <a href="javascript:void(0)" ng-click="addToGroup(group)">
+                                        <span class="fa fa-check pull-left" ng-if="groupContactCheck(group)"></span>
+                                        <span class="badge pull-right">{{groupOPT.groupcount[group]}}</span>{{group}}</a>
+                                 </li>
+                            </ul>
+                        </div><!--Groups-->
+                    </div>
+                </div><!--End List Group-->
+            </div>
+            </form>
+        </div>
+        <div class="col-md-2">
+            <pre class="code">{{ groupOPT | json }}</pre>
+            <pre class="code">{{ contactsOPT | json }}</pre>
+        </div>
+    </div>
+</div>

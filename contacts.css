@@ -1,0 +1,7 @@
+a.list-group-flesh:before{font-family: FontAwesome;content: "\f105"; position: absolute; right: 15px;top: 50%;font-size: 20px;line-height: 20px; margin-top: -10px;}
+.dropdown-flesh:before{font-family: FontAwesome;content: "\f0d7"; position: absolute; right: 15px;top: 50%;font-size: 14px;line-height: 14px; margin-top: -7px;}
+.search-icon:before{font-family: FontAwesome;content: "\f002"; position: absolute; right: 30px;top: 50%;font-size: 14px;line-height: 14px; margin-top: -7px;}
+.list-group-down:before{font-family: FontAwesome;content: "\f0d7"; position: absolute; right: 15px;}
+.position-bottom-right{position:absolute;bottom:15px;right:15px;}
+.alphabet-letter{display:inline-block;text-align:center; width:3.84%;padding:0;margin:0;}
+.bold{font-weight:bold}
