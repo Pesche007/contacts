@@ -32,7 +32,7 @@ angular.module('contacts')
 	
 	modalInstance.result.then(function (selectedItem) {
 		$scope.selected = selectedItem;
-		})
+		});
 	};	
 	})
 .controller('ModalInstanceCtrl', function($scope, $modalInstance, activeTask, status){
