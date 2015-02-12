@@ -65,7 +65,7 @@ angular.module('contacts')
     	if($scope.groupOPT.groups.map(function(e){return e.id;}).indexOf(id)!==-1) {
     		$scope.groupOPT.groups.splice($scope.groupOPT.groups.map(function(e){return e.id;}).indexOf(id), 1);
     		}
-    }
+    };
 	$scope.addElementToGroup=function(e, i){
 		$scope.highlightOut(e);
 		var groupTarget=JSON.parse(e.target.dataset.options);
@@ -74,11 +74,11 @@ angular.module('contacts')
 		var contactID=groupSource.id;
 		console.log(groupID, contactID);
 	};
-	$scope.selGroup = function(id, $event){
+	$scope.selGroup = function(id){
 		if(!$scope.globalEdit){
 			$scope.groupOPT.groupSel=id;
 		}
-	}	
+	};	
 	//Highlight D&D
 	$scope.highlightOver = function(e){
 		var eTarget=e.target;

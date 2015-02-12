@@ -36,7 +36,7 @@
             <div class="list-group-item list-group-item-primary">
                 <h4 class="list-group-item-heading">All Groups</h4>
             </div>            
-            <div ng-click="selGroup(group.id, $event)" ng-repeat="group in groupOPT.groups | filter: groupOPT.searchTerm | orderBy:'label'" 
+            <div ng-click="selGroup(group.id)" ng-repeat="group in groupOPT.groups | filter: groupOPT.searchTerm | orderBy:'label'" 
             data-drop="true" jqyoui-droppable="{onDrop:'addElementToGroup', onOver:'highlightOver', onOut:'highlightOut'}" data-options='{"id":"{{group.id}}"}' 
             class="list-group-item list-group-item-primary animate-enter" ng-class="{'list-group-item-primary-active':groupOPT.groupSel===group.id}">
                 <h4 class="list-group-item-heading">
