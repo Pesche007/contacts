@@ -106,12 +106,12 @@ angular.module('contacts')
 		];
 
 	$scope.contactsShow=function(obj){	
-		var objIndex=$scope.contacts.map(function(e) { return e.tid}).indexOf(obj.tid);	
+		var objIndex=$scope.contacts.map(function(e) { return e.tid;}).indexOf(obj.tid);	
 		$scope.contactsOPT.contactTmp=$scope.contacts[objIndex];	
 		$scope.contactsOPT.contactDisplay=$scope.prepareObj($scope.contacts[objIndex]);
 		};
 
-	$scope.prepareObj=function(obj){
+	$scope.prepareObj=function(){
 		var finalObj=[], tmpObj={}, obj={}, opt={}, optObj={}, save={}, val='', i=0;
 		 for (var key in $scope.itemsOPT) {	
 		 	obj=$scope.itemsOPT[key];
@@ -157,13 +157,14 @@ angular.module('contacts')
 		$scope.contactsOPT.contactNew=0;	
 		$scope.contactsOPT.contactEdit=true;
 		};
-	$scope.contatcsSave=function(){		
+	$scope.contatcsSave=function(){	
+		//var newUser;	
 		if($scope.contactsOPT.contactNew){
 			$scope.contactsOPT.contactTmp={tid:Math.random().toString(36).substr(2, 9)};
-			var newUser=1;
+			//newUser=1;
 			}		
 		else {
-			var newUser=0;
+			//newUser=0;
 			}
 		for(var i=0;i<$scope.contactsOPT.contactDisplay.length;i++){
 			var obj=$scope.contactsOPT.contactDisplay[i];
@@ -205,7 +206,7 @@ angular.module('contacts')
 				}
 			}
 		else {//Simple Array, meaning e.g. mails
-			tmpObj[$scope.itemsOPT[key].items[0].type]=''
+			tmpObj[$scope.itemsOPT[key].items[0].type]='';
 			}
 		obj.items.push(tmpObj);
 		};
@@ -249,8 +250,7 @@ angular.module('contacts')
 		for(var i=0;i<$scope.contactsOPT.contactDisplay.length;i++){
 			if($scope.contactsOPT.contactDisplay[i].key===key){
 				return true;
-				break;
-				};
+				}
 			}
 		return false;
 		};	
