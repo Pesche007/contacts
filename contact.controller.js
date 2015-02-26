@@ -38,7 +38,7 @@ angular.module('contacts')
 		 });
 	};	
 })
-.controller('ContactsCtrl', function ($scope, $http, $filter, $log, $modal, cfg, dataService) {
+.controller('ContactsCtrl', function ($scope, $http, $filter, $log, $modal, cfg, dataService, statePersistence) {
 	cfg.GENERAL.CURRENT_APP = 'contacts';
 	//API   
 	$scope.API={};
@@ -46,7 +46,6 @@ angular.module('contacts')
     $scope.contacts = null;	
 	$scope.contactsOPT={contactDisplay:null, contactSave:null,  contactTmp:null, contactEdit:false, contactNew:0, contactNamesDisplay:null};
 	$scope.groupOPT={groupEdit:0, groupAdd:0, addGroupName:'', groupSel:null, groups:[{id:'abc', label:'Business'},{id:'def', label:'Private'}]};
-	$scope.globalEdit=false;
 
     dataService.getData().then(function(dataResponse) {
     	$log.log(dataResponse);
@@ -254,4 +253,15 @@ angular.module('contacts')
 			}
 		return false;
 		};	
+
+	//Persistance
+    $scope.$on('$destroy', function(){
+		statePersistence.setState('contact', {contacts: $scope.contacts, contactsOPT: $scope.contactsOPT, groupOPT: $scope.groupOPT});
+		});
+    var persVar=statePersistence.getState('contact');
+    if(persVar) {
+    	for(var key in persVar){
+    		$scope[key]=persVar[key];
+    	}    	
+    }
 });
