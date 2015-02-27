@@ -147,11 +147,15 @@
                                 </div>
                                 <div class="list-group-item clearfix" ng-repeat="item in contactsOPT.contactDisplay | orderBy:'sortNr'" 
                                 ng-if="item.items && item.items.length && !item.hide" ng-class="{'animate-if':item.animate}">
-                                    <p class="text-muted">{{item.label}}</p>
-                                    <button class="btn btn-default position-bottom-right" ng-if="contactsOPT.contactEdit && itemsOPT[item.key].hasDropdown" 
-                                    ng-click="addItemDropdown(item)"><span class="fa fa-plus"></span></button>
+                                    <p class="text-muted pull-left">
+                                        {{item.label}}
+                                    </p>
+                                    <button class="btn-none pull-left" ng-if="contactsOPT.contactEdit && itemsOPT[item.key].hasDropdown" ng-click="addItemDropdown(item)">
+                                        <span class="fa fa-plus"></span>
+                                    </button>                                    
+                                    <div class="clearfix"></div>
                                     <div ng-repeat="e in item.items track by $index" ng-init="parentIndex=$index">
-                                        <div ng-if="e.type!==undefined" class="pull-left" ng-class="{'float-left-border-right':!$last}">
+                                        <div ng-if="e.type!==undefined" class="pull-left margin-bottom-M min-width-contact-float" ng-class="{'float-left-border-right':!$last}">
                                             <h4 ng-if="!contactsOPT.contactEdit" class="list-group-item-heading" >{{e.type}}</h4><!--View-->
                                             <!--Dropdown-->
                                             <div ng-if="contactsOPT.contactEdit && itemsOPT[item.key].hasDropdown"><!--Edit-->
