@@ -88,7 +88,7 @@
                     </li>
                     <li ng-if="contactsOPT.contactEdit">
                         <button class="btn-none" ng-disabled="contactForm.$invalid" ng-click="contatcsSave()"><span class="fa fa-check fa-2x"></span></button>
-                    </li>
+                    </li>                   
                     <li ng-if="contactsOPT.contactEdit">
                         <div class="dropdown"><!--Additional Field-->
                             <span class="fa fa-plus fa-2x dropdown-toggle"></span>
@@ -98,6 +98,12 @@
                                 </li>
                             </ul>
                         </div><!--Additional Field-->                                
+                    </li>
+                    <li ng-if="contactsOPT.contactEdit">
+                        <button class="btn-none" modal-confirm title="Confirm" function="contactsDelete()"
+                        text="Delete Contact &quot;{{contactsOPT.contactDisplay[0].items[0]}} {{contactsOPT.contactDisplay[1].items[0]}}&quot;?">
+                            <span class="fa fa-trash fa-2x"></span>
+                        </button>
                     </li> 
                 </ul>                    
             </div>
@@ -145,7 +151,7 @@
                                     <button class="btn btn-default position-bottom-right" ng-if="contactsOPT.contactEdit && itemsOPT[item.key].hasDropdown" 
                                     ng-click="addItemDropdown(item)"><span class="fa fa-plus"></span></button>
                                     <div ng-repeat="e in item.items track by $index" ng-init="parentIndex=$index">
-                                        <div ng-if="e.type!==undefined" class="pull-left margin-right-M">
+                                        <div ng-if="e.type!==undefined" class="pull-left" ng-class="{'float-left-border-right':!$last}">
                                             <h4 ng-if="!contactsOPT.contactEdit" class="list-group-item-heading" >{{e.type}}</h4><!--View-->
                                             <!--Dropdown-->
                                             <div ng-if="contactsOPT.contactEdit && itemsOPT[item.key].hasDropdown"><!--Edit-->
@@ -171,12 +177,12 @@
                                             </div>
                                             <!--End Dropdown-->
                                             <div class="margin-right-S margin-bottom-S" ng-repeat="key in notSorted(e) track by $index" ng-if="key!=='type'" ng-class="{'pull-left':itemsOPT[item.key].items[key].nobr, 'clearfix':1}">
-                                                <span ng-if="!contactsOPT.contactEdit && key!=='dateValue'">{{e[key]}}</span><!--View-->
-                                                <span ng-if="!contactsOPT.contactEdit && key==='dateValue'">{{e[key] | date:'dd.MM.yyyy'}}</span><!--View-->
+                                                <div ng-if="!contactsOPT.contactEdit" ng-bind-html="e[key] | textFormatter"></div><!--View-->
                                                 <div class="input-group" ng-if="contactsOPT.contactEdit && itemsOPT[item.key].items.length"><!--Edit-->
                                                     <input ng-if="key!=='dateValue'" type="text" class="form-control" ng-model="e[key]" placeholder="{{itemsOPT[item.key].label}}"/>
-                                                    <input  ng-if="key=='dateValue'" type="text" class="form-control" datepicker-popup="dd.MM.yyyy" ng-model="e[key]" placeholder="{{itemsOPT[item.key].label}}"
-                                                    ng-click="open($event, parentIndex)" is-open="opened[parentIndex]" ng-change="formatedate(e)" starting-day="1" show-weeks="0">
+                                                    <input ng-if="key=='dateValue'" type="text" class="form-control" datepicker-popup="dd.MM.yyyy" ng-model="e[key]" 
+                                                    placeholder="{{itemsOPT[item.key].label}}" ng-click="open($event, parentIndex)" is-open="opened[parentIndex]" 
+                                                    ng-change="formatedate(e)" starting-day="1" show-weeks="0">
                                                     <span class="input-group-btn">
                                                         <button class="btn btn-default" ng-click="deleteItem(2, item.key, parentIndex)"><span class="fa fa-trash-o"></span></button>
                                                     </span>
@@ -195,10 +201,7 @@
                                             </div>
                                         </div>
                                    </div>
-                                </div>
-                                <div class="panel-footer clearfix" ng-if="contactsOPT.contactEdit">
-                                    <button ng-click="contatcsDelete()" class="btn btn-danger pull-right"><span class="fa fa-trash-o"></span> Delete</button>
-                                </div>            
+                                </div>          
                             </div>
                         </form>
                     </div>

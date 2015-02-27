@@ -104,8 +104,9 @@ angular.module('contacts')
 		{tid:'tenantA4', firstName: 'Ruedi', lastName: 'Hauer'}
 		];
 
-	$scope.contactsShow=function(obj){	
-		var objIndex=$scope.contacts.map(function(e) { return e.tid;}).indexOf(obj.tid);	
+	$scope.contactsShow=function(obj){
+		$scope.contactsOPT.contactEdit=false;	
+		var objIndex=findIndexbyKeyValue($scope.contacts, 'tid', obj.tid);	
 		$scope.contactsOPT.contactTmp=$scope.contacts[objIndex];	
 		$scope.contactsOPT.contactDisplay=$scope.prepareObj($scope.contacts[objIndex]);
 		};
@@ -180,6 +181,16 @@ angular.module('contacts')
 		$scope.contactsOPT.contactEdit=false;
 		$scope.contactsShow({tid:$scope.contactsOPT.contactTmp.tid});
 		};
+	$scope.contactsDelete=function(){
+		console.log('delte:', $scope.contactsOPT.contactTmp);
+		var index = findIndexbyKeyValue($scope.contactsOPT.contactNamesDisplay, 'tid', $scope.contactsOPT.contactTmp.tid);
+		if(index!==-1){
+			$scope.contactsOPT.contactNamesDisplay.splice(index, 1);
+			$scope.contactsOPT.contactEdit=false;
+			$scope.contactsOPT.contactDisplay=null;
+			$scope.contactsOPT.contactTmp=null;
+		}
+	};
 	$scope.setDropdown=function(obj, model){		
 		model.type=obj;
 		};
@@ -252,8 +263,25 @@ angular.module('contacts')
 				}
 			}
 		return false;
+		};
+	//Datepicker
+	$scope.today = function() {
+		$scope.dt = $filter('date')(new Date(), 'yyyy-MM-dd');
+		};
+	$scope.today();	
+	$scope.opened=[];
+	$scope.open = function($event, openid) {
+		$event.preventDefault();
+		$event.stopPropagation();
+		$scope.opened[openid] = true;
 		};	
-
+	$scope.formatedate = function (obj){	
+		obj.dateValue = $filter('date')(obj.dateValue, 'dd.MM.yyyy');
+		};		
+	//Finds the index in a simple object-arry by key=>value
+	var findIndexbyKeyValue = function(obj, key, value){
+    	return obj.map(function(e){return e[key];}).indexOf(value);
+	}
 	//Persistance
     $scope.$on('$destroy', function(){
 		statePersistence.setState('contact', {contacts: $scope.contacts, contactsOPT: $scope.contactsOPT, groupOPT: $scope.groupOPT});
