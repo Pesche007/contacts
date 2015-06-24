@@ -21,6 +21,7 @@ angular.module('contacts')
 	$scope.taskOpen = function (task) {	
 		$scope.activeTask=task;
 		var modalInstance = $modal.open({
+			animation:false,
 			templateUrl: 'myModalContent.html',
 			controller: 'ModalInstanceCtrl',
 			size:'lg',
