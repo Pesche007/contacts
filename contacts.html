@@ -8,7 +8,8 @@
         actions="AED" 
         row-click="true" 
         row-click-function="selectAdressBook(row)" 
-        fn="adressbookFunction(action, param, data)"                
+        fn="adressbookFunction(action, param, data)"    
+        row-droppable="true"            
     ></div>
     </div>
     <div class="col-sm-4 col-lg-4">
@@ -22,7 +23,8 @@
             row-click-function="selectContact(row)"  
             can-update="true" 
             custom-header-settings="{icon:'fa fa-plus'}" 
-            custom-header-action="newContact()" 
+            custom-header-action="newContact()"
+            row-draggable="true"
         ></div>
     </div>
     <div class="col-sm-5 col-lg-5">

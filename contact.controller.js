@@ -28,7 +28,10 @@ angular.module('contacts')
 		}
 		if(action===4){//Remove
 			adressbookEditRemove(param);
-		}				
+		}	
+		if(action===5){//Drop on adressbook
+			console.log('id ' + param.drag.entity.id + ' dropped on id ' + param.drop.entity.id);
+		}
 	};
 	//Save Adressbook -> New
 	var adressbookNewSave = function(param){
@@ -234,7 +237,10 @@ angular.module('contacts')
 		});
 	};
 
-
+	$scope.test=function(){
+		console.log($scope.testen)
+	}
+	$scope.testen=2;
 /*
 
 	Addressbooks
