@@ -15,8 +15,9 @@ angular.module('contacts')
 				$log.log('ERROR: ContactsService.list() returned with status ' + status);
 			});
 		},	
-		listAdressAll: function() {		    
-			return $http.get(cfg.contacts.SVC_URI + '/allContacts')
+		listAdressAll: function(type) {
+			var api = type===1 ? 'allContacts' : 'allOrgs';		    
+			return $http.get(cfg.contacts.SVC_URI + '/' + api)
 			.success(function (data, status) {				
 			})
 			.error(function(data, status, headers, config) {
@@ -52,16 +53,18 @@ angular.module('contacts')
 				$log.log('ERROR: ContactsService.delete() returned with status ' + status);
 			});
 		},
-		listContacts: function(id) {					   
-			return $http.get(cfg.contacts.SVC_URI + '/' + id +'/contact')
+		listContacts: function(id, type) {	
+			var api = type===1 ? 'contact' : 'org';						   
+			return $http.get(cfg.contacts.SVC_URI + '/' + id +'/' + api)
 			.success(function (data, status) {				
 			})
 			.error(function(data, status, headers, config) {
 				$log.log('ERROR: ContactsService.list() returned with status ' + status);
 			});
 		},
-		getContact: function(addressbook, id) {			
-			return $http.get(cfg.contacts.SVC_URI + '/' + addressbook + '/contact/' + id)
+		getContact: function(addressbook, id, type) {	
+			var api = type===1 ? 'contact' : 'org';			
+			return $http.get(cfg.contacts.SVC_URI + '/' + addressbook + '/' + api + '/' + id)
 			.success(function(data, status) {
 
 			})
@@ -69,8 +72,9 @@ angular.module('contacts')
 				$log.log('ERROR: ContactsService.get(' + id + ') returned with status ' + status);
 			});
 		},	
-		getContactAddress: function(addressbook, id) {			
-			return $http.get(cfg.contacts.SVC_URI + '/' + addressbook + '/contact/' + id + '/address')
+		getContactAddress: function(addressbook, id, type) {			
+			var api = type===1 ? 'contact' : 'org';	
+			return $http.get(cfg.contacts.SVC_URI + '/' + addressbook + '/' + api + '/' + id + '/address')
 			.success(function(data, status) {
 
 			})
@@ -78,10 +82,11 @@ angular.module('contacts')
 				$log.log('ERROR: ContactsService.get(' + id + ') returned with status ' + status);
 			});
 		},			
-		saveContact: function(addressbook, contact) {						
-			var data = {contactModel:contact};
+		saveContact: function(addressbook, contact, type) {	
+			var api = type===1 ? 'contact' : 'org';					
+			var data = type===1 ? {contactModel:contact} : {orgModel:contact};
 			if(contact.id){
-				return $http.put(cfg.contacts.SVC_URI + '/'+addressbook + '/contact/' + contact.id, data)
+				return $http.put(cfg.contacts.SVC_URI + '/'+addressbook + '/' + api + '/' + contact.id, data)
 				.success(function(data, status) {				
 				})
 				.error(function(data, status, headers, config) {
@@ -89,7 +94,7 @@ angular.module('contacts')
 				});
 			}
 			else{
-				return $http.post(cfg.contacts.SVC_URI + '/'+addressbook + '/contact', data)
+				return $http.post(cfg.contacts.SVC_URI + '/'+addressbook + '/' + api, data)
 				.success(function(data, status) {				
 				})
 				.error(function(data, status, headers, config) {
@@ -98,25 +103,26 @@ angular.module('contacts')
 			}
 
 		},
-		postmulti:function(addressbook, contact, obj){
+		postmulti:function(addressbook, contact, obj, type){
 			console.log('saving', obj)
 			var postOBJ=[], save;
+			var api = type===1 ? 'contact' : 'org';	
 			for(var key in obj){
 				for(var i=0;i<obj[key].length;i++){
 					save = {addressModel:obj[key][i]};			
 					if(obj[key][i].id){
 						if(obj[key][i].deleted){
 							console.log('delete', save)
-							postOBJ.push($http.delete(cfg.contacts.SVC_URI + '/' + addressbook + '/contact/' + contact + '/'+key+'/' + obj[key][i].id));
+							postOBJ.push($http.delete(cfg.contacts.SVC_URI + '/' + addressbook + '/' + api + '/' + contact + '/'+key+'/' + obj[key][i].id));
 						}
 						else {
 							console.log('put', save)
-							postOBJ.push($http.put(cfg.contacts.SVC_URI + '/' + addressbook + '/contact/' + contact + '/'+key+'/' + obj[key][i].id, save));
+							postOBJ.push($http.put(cfg.contacts.SVC_URI + '/' + addressbook + '/' + api + '/' + contact + '/'+key+'/' + obj[key][i].id, save));
 						}
 					}
 					else {
 						console.log('post', save)
-						postOBJ.push($http.post(cfg.contacts.SVC_URI + '/' + addressbook + '/contact/' + contact + '/'+key, save));
+						postOBJ.push($http.post(cfg.contacts.SVC_URI + '/' + addressbook + '/' + api + '/' + contact + '/'+key, save));
 					}
 					
 				}
@@ -128,8 +134,9 @@ angular.module('contacts')
 			    console.log('fail', response);
 			});
 		},
-		deleteContact: function(addressbook, contact) {			
-			return $http.delete(cfg.contacts.SVC_URI + '/' + addressbook + '/contact/' + contact)
+		deleteContact: function(addressbook, contact, type) {
+			var api = type===1 ? 'contact' : 'org';				
+			return $http.delete(cfg.contacts.SVC_URI + '/' + addressbook + '/' + api + '/' + contact)
 			.success(function(data, status) {
 			})
 			.error(function(data, status, headers, config) {

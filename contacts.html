@@ -7,7 +7,6 @@
         structure="adressbookOPT.structure" 
         actions="AED" 
         row-click="true" 
-        row-click-function="selectAdressBook(row)" 
         fn="adressbookFunction(action, param, data)"    
         row-droppable="true"            
     ></div>
@@ -19,11 +18,10 @@
             source="contactsOPT.contactsOverview" 
             structure="contactsOPT.structure" 
             actions="N" 
-            row-click="true" 
-            row-click-function="selectContact(row)"  
+            row-click="true"  
             can-update="true" 
-            custom-header-settings="{icon:'fa fa-plus'}" 
-            custom-header-action="newContact()"
+            fn="contactFunction(action, param, data)" 
+            custom-header-settings="contactCustomHeader" 
             row-draggable="true"
         ></div>
     </div>
@@ -31,7 +29,8 @@
         <div ng-if="contactsDetailOPT.contactLoaded" class="panel panel-white no-border-radius">
             <div class="panel-heading clearfix">
                 <div class="pull-left">
-                    <h4>{{contactsDetailOPT.contact.fn}}</h4>
+                    <h4 ng-if="contactsOPT.type===1">{{contactsDetailOPT.contact.firstName}} {{contactsDetailOPT.contact.lastName}}</h4>
+                    <h4 ng-if="contactsOPT.type===2">{{contactsDetailOPT.contact.name}}</h4>
                 </div>
                 <div class="pull-right panel-right-actions">
                     <a ng-if="contactsDetailOPT.edit" ng-click="contactSave()" class="text-black margin-left-L"><i class="fa fa-floppy-o"></i></a>
@@ -60,8 +59,6 @@
                         </div>                    
                     </div>        
                 </div>
-                <pre class="code">{{contactsDetailOPT.contact}}</pre>
-                <pre class="code">{{contactsOPT.contactsOverview}}</pre>
             </div>
         </div>
     </div>
