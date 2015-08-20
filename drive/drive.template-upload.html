@@ -1,0 +1,31 @@
+<!--<div ng-show="uploader.isHTML5">
+    <div nv-file-drop="" uploader="uploader">
+        <div nv-file-over="" uploader="uploader" over-class="another-file-over-class" class="my-drop-zone well">
+            Drag & Drop Files
+        </div>
+    </div>
+</div>
+
+<input type="file" nv-file-select="" uploader="uploader" />
+
+<div>
+    Queue progress:
+    <div class="progress" style="">
+        <div class="progress-bar" role="progressbar" ng-style="{ 'width': uploader.progress + '%' }"></div>
+    </div>
+
+    <div>
+        <img ng-show="{{imgUrl!==null}}" ng-src="{{imgUrl}}">
+    </div>
+</div>
+-->
+<button type="file" ngf-select="uploadFiles($file)">Select File</button>
+  <br>
+  File:
+  <div style="font:smaller">{{f.name}} {{f.$error}} {{f.$errorParam}}
+      <span class="progress" ng-show="f.progress >= 0">
+          <div style="width:{{f.progress}}%"  
+               ng-bind="f.progress + '%'"></div>
+      </span>
+  </div>     
+  {{errorMsg}}
