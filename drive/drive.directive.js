@@ -10,14 +10,25 @@ angular.module('contacts')
 
         return {
             restrict: 'E',
+            scope:{
+                folder:'=',
+                preventTopnav:'@'
+            },
             templateUrl: 'app/contacts/drive/drive.template-list.html',
-            controller: ['$http', '$interpolate', 'AlfrescoRestService', function ($http, $interpolate, rest) {
-
+            controller: ['$scope', '$http', '$interpolate', 'AlfrescoRestService', function ($scope, $http, $interpolate, rest) {
+                $scope.drawClass = function(name){
+                    var ending = name.split('.').pop().toLowerCase();
+                    if(ending === 'txt') {return 'fa fa-file-text-o margin-right-M';}
+                    else if(ending === 'pdf') {return 'fa fa-file-pdf-o margin-right-M';}
+                    else if(ending === 'doc' || ending ==='docx') {return 'fa fa-file-word-o margin-right-M';}
+                    else if(ending === 'xls' || ending ==='xlsx') {return 'fa fa-file-excel-o margin-right-M';}
+                    else {return 'fa fa-file-o margin-right-S';}
+                }
                 var store = this;
 
                 store.docLib = [];
 
-                store.path = "";
+                store.path = $scope.folder ? $scope.folder : '';
 
                 store.urlTemplate = $interpolate(constants.companyhome);
 

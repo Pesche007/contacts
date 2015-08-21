@@ -1,2 +1,2 @@
-<a ng-href="" ng-show="docLibCtrl.path!==null && docLibCtrl.path!==''" ng-click="docLibCtrl.goBack()" class="list-group-item">...</a>
-<a ng-href="" ng-click="docLibCtrl.clickLink(item)" ng-repeat="item in docLibCtrl.docLib.items" class="list-group-item">{{item.node.properties["cm:name"]}}</a>
+<a ng-href="" ng-if="!preventTopnav" ng-show="docLibCtrl.path!==null && docLibCtrl.path!==''" ng-click="docLibCtrl.goBack()" class="list-group-item">...</a>
+<a ng-href="" ng-click="docLibCtrl.clickLink(item)" ng-repeat="item in docLibCtrl.docLib.items" class="list-group-item"><i ng-class="drawClass(item.node.properties['cm:name'])"></i>{{item.node.properties["cm:name"]}}</a>

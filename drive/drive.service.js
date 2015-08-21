@@ -10,7 +10,7 @@ angular.module('contacts')
             password: 'admin',
 
             loginUrl: 'http://127.0.0.1:8081/alfresco/service/api/login',//'/alfresco/service/api/login',
-            companyhome: "http://127.0.0.1:8081/alfresco/s/slingshot/doclib2/doclist/all/node/alfresco/user/home/"
+            companyhome: "http://127.0.0.1:8081/alfresco/s/slingshot/doclib2/doclist/all/node/alfresco/user/home"
         };
 
         this.ticket = null;
