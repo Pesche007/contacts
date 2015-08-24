@@ -5,7 +5,7 @@ angular.module('contacts')
 	cfg.GENERAL.CURRENT_APP = 'contacts';
 	
     //********************* ADRESSBOOK ***************** //	
-	$scope.adressbookOPT={adressbookLoaded:0, adressbooks:[], structure:[], selected:[]};	
+	$scope.adressbookOPT={adressbookLoaded:0, adressbooks:[], structure:[], selected:[], standard:{}};	
 	//Initial Load
 	ContactsService.listAdress().then(function(result) {
 		var data = result.data.addressbookModel;		
@@ -15,6 +15,7 @@ angular.module('contacts')
 			data[index].disableEdit=1;
 			data[index].disableDelete=1;
 			$scope.adressbookOPT.selected = data[index];
+			$scope.adressbookOPT.standard = data[index];
 		}
 		$scope.adressbookOPT.adressbooks=data;
 		$scope.adressbookOPT.structure=[
@@ -74,17 +75,18 @@ angular.module('contacts')
 		if(row.isSelected){
 			var id=row.entity.id;
 			$scope.adressbookOPT.selected=row.entity;
-			ContactsService.listContacts(id,  $scope.contactsOPT.type).then(function(result) {				
-				var data=result.data[contactModel];
-				$scope.contactsOPT.contactsOverview=data;
-				$scope.contactsDetailOPT.contactLoaded=0;
-	   		}, function(reason) {//error
-	   			alertsManager.addAlert('Could not load contacts. '+reason.status+': '+reason.statusText, 'danger', 'fa-times', 1);	
-			});
 		}
 		else {
-
+			var id=$scope.adressbookOPT.standard.id;
+			$scope.adressbookOPT.selected=$scope.adressbookOPT.standard;
 		}		
+		ContactsService.listContacts(id,  $scope.contactsOPT.type).then(function(result) {				
+			var data=result.data[contactModel];
+			$scope.contactsOPT.contactsOverview=data;
+			$scope.contactsDetailOPT.contactLoaded=0;
+   		}, function(reason) {//error
+   			alertsManager.addAlert('Could not load contacts. '+reason.status+': '+reason.statusText, 'danger', 'fa-times', 1);	
+		});		
 	}
 	//Drop Contact on Adressbook
 	$scope.adressbookDropContact = function(contactId, adressbookId){
